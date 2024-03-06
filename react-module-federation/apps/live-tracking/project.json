@@ -1,0 +1,84 @@
+{
+  "name": "live-tracking",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/live-tracking/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/live-tracking",
+        "index": "apps/live-tracking/src/index.html",
+        "baseHref": "/",
+        "main": "apps/live-tracking/src/main.ts",
+        "tsConfig": "apps/live-tracking/tsconfig.app.json",
+        "assets": ["apps/live-tracking/src/favicon.ico", "apps/live-tracking/src/assets"],
+        "styles": ["apps/live-tracking/src/styles.css"],
+        "scripts": [],
+        "webpackConfig": "apps/live-tracking/webpack.config.ts"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/live-tracking/src/environments/environment.ts",
+              "with": "apps/live-tracking/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "webpackConfig": "apps/live-tracking/webpack.config.prod.ts"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/react:module-federation-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "live-tracking:build",
+        "hmr": true,
+        "port": 4202
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "live-tracking:build:development"
+        },
+        "production": {
+          "buildTarget": "live-tracking:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": {
+        "buildTarget": "live-tracking:build",
+        "watch": false,
+        "port": 4202
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "live-tracking:build:development"
+        },
+        "production": {
+          "buildTarget": "live-tracking:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

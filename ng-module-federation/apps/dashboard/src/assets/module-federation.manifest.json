@@ -1,0 +1,4 @@
+{
+  "analytics": "http://localhost:4201",
+  "live-tracking": "http://localhost:4202"
+}

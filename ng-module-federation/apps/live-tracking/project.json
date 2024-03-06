@@ -1,0 +1,98 @@
+{
+  "name": "live-tracking",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "ng-module-federation",
+  "sourceRoot": "apps/live-tracking/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/live-tracking",
+        "index": "apps/live-tracking/src/index.html",
+        "main": "apps/live-tracking/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/live-tracking/tsconfig.app.json",
+        "assets": [
+          "apps/live-tracking/src/favicon.ico",
+          "apps/live-tracking/src/assets"
+        ],
+        "styles": ["apps/live-tracking/src/styles.css"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/live-tracking/webpack.config.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/live-tracking/webpack.prod.config.ts"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "port": 4202,
+        "publicHost": "http://localhost:4202"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "live-tracking:build:production"
+        },
+        "development": {
+          "buildTarget": "live-tracking:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "live-tracking:build"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": {
+        "buildTarget": "live-tracking:build",
+        "port": 4202,
+        "watch": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "live-tracking:build:development"
+        },
+        "production": {
+          "buildTarget": "live-tracking:build:production"
+        }
+      }
+    }
+  }
+}

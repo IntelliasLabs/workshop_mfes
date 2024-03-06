@@ -1,0 +1,84 @@
+{
+  "name": "notifications",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/notifications/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/notifications",
+        "index": "apps/notifications/src/index.html",
+        "baseHref": "/",
+        "main": "apps/notifications/src/main.ts",
+        "tsConfig": "apps/notifications/tsconfig.app.json",
+        "assets": ["apps/notifications/src/favicon.ico", "apps/notifications/src/assets"],
+        "styles": ["apps/notifications/src/styles.css"],
+        "scripts": [],
+        "webpackConfig": "apps/notifications/webpack.config.ts"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/notifications/src/environments/environment.ts",
+              "with": "apps/notifications/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "webpackConfig": "apps/notifications/webpack.config.prod.ts"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/react:module-federation-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "notifications:build",
+        "hmr": true,
+        "port": 4203
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "notifications:build:development"
+        },
+        "production": {
+          "buildTarget": "notifications:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": {
+        "buildTarget": "notifications:build",
+        "watch": false,
+        "port": 4203
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "notifications:build:development"
+        },
+        "production": {
+          "buildTarget": "notifications:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

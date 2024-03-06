@@ -1,0 +1,71 @@
+{
+  "name": "ng-module-federation",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "ng-module-federation",
+  "sourceRoot": "apps/ng-module-federation/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/ng-module-federation",
+        "index": "apps/ng-module-federation/src/index.html",
+        "main": "apps/ng-module-federation/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/ng-module-federation/tsconfig.app.json",
+        "assets": [
+          "apps/ng-module-federation/src/favicon.ico",
+          "apps/ng-module-federation/src/assets"
+        ],
+        "styles": ["apps/ng-module-federation/src/styles.css"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "ng-module-federation:build:production"
+        },
+        "development": {
+          "buildTarget": "ng-module-federation:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "ng-module-federation:build"
+      }
+    }
+  }
+}
